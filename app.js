@@ -82,14 +82,16 @@ const estado = document.getElementById('estado');
 const hud = document.getElementById('hud');
 const controles = document.getElementById('controles');
 const botonVR = document.getElementById('entrar-vr');
-const botonResultados = document.getElementById('ver-resultados');
-const selectorEscala = document.getElementById('escala-casco');
-const panel = document.getElementById('resultados');
-const panelMeta = document.getElementById('res-meta');
-const panelFilas = document.getElementById('res-filas');
-const enlaceRegistro = document.getElementById('res-enviar');
-const botonCopiar = document.getElementById('res-copiar');
-const avisoCopia = document.getElementById('res-aviso');
+// A page cached from before the stress test lacks these; stand-ins keep the viewer working until it refreshes.
+const pedir = (id, tipo = 'div') => document.getElementById(id) || document.createElement(tipo);
+const botonResultados = pedir('ver-resultados', 'button');
+const selectorEscala = pedir('escala-casco', 'select');
+const panel = pedir('resultados');
+const panelMeta = pedir('res-meta');
+const panelFilas = pedir('res-filas');
+const enlaceRegistro = pedir('res-enviar', 'a');
+const botonCopiar = pedir('res-copiar', 'button');
+const avisoCopia = pedir('res-aviso');
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
 const resolucionPantalla = Math.round(Math.min(window.devicePixelRatio, 1.5) * 100);
@@ -1063,7 +1065,7 @@ function alternarPanel() {
 for (const boton of document.querySelectorAll('button')) boton.addEventListener('click', () => boton.blur());
 botonResultados.addEventListener('click', alternarPanel);
 selectorEscala.addEventListener('change', () => selectorEscala.blur());
-document.getElementById('res-cerrar').addEventListener('click', () => { panel.hidden = true; });
+pedir('res-cerrar', 'button').addEventListener('click', () => { panel.hidden = true; });
 botonCopiar.addEventListener('click', () => {
   if (!ultimaCorrida) return;
   const texto = textoCorrida(ultimaCorrida);
