@@ -48,7 +48,41 @@
       background: #4FD1CB; color: #062022; cursor: pointer;
     }
     #entrar-vr:disabled { background: #2A4B4B; color: #8FB2AD; cursor: not-allowed; }
-    #entrar-vr:focus-visible { outline: 3px solid #E8F4F2; outline-offset: 3px; }
+    #entrar-vr:focus-visible, .boton:focus-visible, #escala-casco:focus-visible, #res-enviar:focus-visible { outline: 3px solid #E8F4F2; outline-offset: 3px; }
+    #ayuda details { margin-top: 6px; }
+    #ayuda summary { cursor: pointer; color: #9FC3BE; }
+    #ayuda details p { margin-top: 4px; }
+    #acciones { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 10px; }
+    .boton {
+      font: inherit; font-size: 15px; font-weight: 600;
+      padding: 10px 16px; border: 1px solid #4FD1CB; border-radius: 999px;
+      background: rgba(11, 33, 36, 0.82); color: #E8F4F2; cursor: pointer; text-decoration: none;
+    }
+    .boton:disabled { border-color: #2A4B4B; color: #6F9490; cursor: not-allowed; }
+    #acciones label { display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px; background: rgba(11, 33, 36, 0.82); font-size: 13px; color: #CFE5E1; }
+    #escala-casco { font: inherit; font-size: 14px; padding: 4px 6px; border-radius: 6px; border: 1px solid #2F5F5E; background: #0B2124; color: #E8F4F2; }
+
+    #resultados {
+      position: fixed; top: 12px; right: 12px; z-index: 4;
+      width: min(720px, calc(100vw - 24px)); max-height: calc(100vh - 110px);
+      display: flex; flex-direction: column; gap: 10px;
+      padding: 16px; border-radius: 12px; background: rgba(8, 26, 29, 0.96); color: #E8F4F2;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+    }
+    #resultados header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    #resultados h2 { margin: 0; font-size: 18px; }
+    #res-meta { margin: 4px 0 0; font-size: 13px; color: #9FC3BE; }
+    .tabla { overflow: auto; border-top: 1px solid #1F4546; }
+    #resultados table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+    #resultados th { position: sticky; top: 0; background: #0B2124; text-align: right; font-weight: 600; color: #9FC3BE; padding: 6px 8px; white-space: nowrap; }
+    #resultados td { text-align: right; padding: 5px 8px; border-bottom: 1px solid #16393A; white-space: nowrap; }
+    #resultados th:nth-child(-n+2), #resultados td:nth-child(-n+2) { text-align: left; }
+    #resultados td[data-nivel="bien"] { color: #6EE7A8; font-weight: 700; }
+    #resultados td[data-nivel="justo"] { color: #F2C94C; font-weight: 700; }
+    #resultados td[data-nivel="mal"] { color: #FF8A7A; font-weight: 700; }
+    .pie { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+    #res-aviso { margin: 0; font-size: 13px; color: #9FC3BE; }
+    .nota { margin: 0; font-size: 12px; color: #86A9A4; line-height: 1.45; }
     @media (prefers-reduced-motion: reduce) { #barra-llena { transition: none; } }
   </style>
   <script type="importmap">
@@ -74,12 +108,52 @@
 
   <div id="controles" hidden>
     <div id="ayuda">
-      <p><strong>En la compu:</strong> W A S D o flechas para caminar · arrastrá con el mouse para mirar · Shift para ir más rápido · Espacio junto al ascensor para subir o bajar</p>
-      <p><strong>En el casco:</strong> joystick izquierdo camina (apretalo para ir más rápido) · joystick derecho gira · A: ascensor</p>
-      <p><strong>Pruebas:</strong> 1 / X quita capas de la estructura del domo · 2 / Y vidrio · 3 / B sombras · H oculta el medidor</p>
+      <p><strong>En la compu:</strong> W A S D o flechas para caminar · arrastrá con el mouse para mirar · Q y E giran · Shift para ir más rápido · Espacio junto al ascensor · R vuelve al punto de prueba</p>
+      <p><strong>En el casco:</strong> joystick izquierdo camina (apretalo para ir más rápido) · joystick derecho gira (apretalo para volver al punto de prueba) · A: ascensor</p>
+      <p><strong>Prueba de carga:</strong> P en la compu o grip derecho en el casco. Dura unos 3 minutos y mide sola: quedate quieto mirando el domo.</p>
+      <details>
+        <summary>Cambiar la carga a mano</summary>
+        <p>Compu: 1 estructura · 2 vidrio · 3 sombras · 4 estructuras extra · 5 sillas · 6 sillas sueltas o instanciadas · 7 luces · 8 materiales · 9 imágenes 2K · 0 resolución · coma y punto: paso anterior y siguiente · T resultados · H medidor</p>
+        <p>Casco: X estructura · Y vidrio · B sombras · gatillos: paso anterior y siguiente · grip izquierdo: tablero de resultados</p>
+      </details>
     </div>
-    <button id="entrar-vr" disabled>Entrar en VR</button>
+    <div id="acciones">
+      <button id="ver-resultados" class="boton" type="button" disabled>Resultados</button>
+      <label for="escala-casco">Resolución del casco
+        <select id="escala-casco">
+          <option value="0.8">0,8×</option>
+          <option value="1" selected>1×</option>
+          <option value="1.2">1,2×</option>
+          <option value="1.4">1,4×</option>
+        </select>
+      </label>
+      <button id="entrar-vr" disabled>Entrar en VR</button>
+    </div>
   </div>
+
+  <aside id="resultados" hidden aria-label="Resultados de la prueba">
+    <header>
+      <div>
+        <h2>Resultados de la prueba</h2>
+        <p id="res-meta"></p>
+      </div>
+      <button id="res-cerrar" class="boton" type="button">Cerrar</button>
+    </header>
+    <div class="tabla">
+      <table>
+        <thead>
+          <tr><th>Paso</th><th>Qué</th><th>cuadros/s</th><th>ms</th><th>ms sin tope</th><th>peor ms</th><th>triángulos</th><th>llamadas</th></tr>
+        </thead>
+        <tbody id="res-filas"></tbody>
+      </table>
+    </div>
+    <div class="pie">
+      <a id="res-enviar" class="boton" href="#" target="_blank" rel="noopener">Enviar al registro</a>
+      <button id="res-copiar" class="boton" type="button">Copiar</button>
+      <p id="res-aviso" role="status"></p>
+    </div>
+    <p class="nota">En el casco los triángulos y las llamadas suman los dos ojos. «ms sin tope» mide la compu sin el límite de la pantalla. Para enviar desde el casco, su navegador tiene que tener la sesión de claude.ai abierta; si no, copiá los resultados o dictámelos.</p>
+  </aside>
 
   <script type="module" src="app.js"></script>
 </body>

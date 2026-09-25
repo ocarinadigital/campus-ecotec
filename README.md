@@ -13,8 +13,15 @@ Funciona en el navegador de la computadora y en el navegador de Meta Quest (bot�
 
 El medidor muestra cuadros por segundo, milisegundos por cuadro, triángulos dibujados y llamadas de dibujo.
 
-- **1 / X:** apaga capas de la estructura del domo, en orden: nudos, tapetas, juntas y perfiles.
-- **2 / Y:** vidrio sí o no. **3 / B:** sombras sí o no. **H:** oculta el medidor.
+- **Prueba automática:** P en la compu, grip derecho en el casco. Se para en el patio mirando el domo 1 y recorre
+  31 pasos (unos 3 minutos): geometría, objetos, luces, efectos, contenido sin estructura y memoria de imágenes.
+  Al terminar muestra la tabla y la guarda en el navegador. «Enviar al registro» la manda a la página de registro.
+- **A mano en la compu:** 1 estructura · 2 vidrio · 3 sombras · 4 estructuras extra · 5 sillas · 6 sillas sueltas o
+  instanciadas · 7 luces · 8 materiales como en Blender · 9 imágenes 2K · 0 resolución · coma y punto: pasos ·
+  R: volver al punto de prueba · T: resultados · H: medidor.
+- **A mano en el casco:** X estructura · Y vidrio · B sombras · gatillos: paso anterior y siguiente ·
+  grip izquierdo: tablero de resultados · apretar el joystick derecho: volver al punto de prueba.
+- La resolución del casco se elige antes de entrar en VR (0,8× a 1,4×).
 
 Modelo: 1.331.474 triángulos, 177 objetos, `modelo/campus.glb` comprimido con Draco (12,9 MB).
 
